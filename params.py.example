@@ -1,0 +1,16 @@
+TOKEN = "TOKEN"
+URL = "https://api.telegram.org/bot" + TOKEN + "/"
+URL_FILE = "https://api.telegram.org/file/bot" + TOKEN + "/"
+
+# Min hour for add to currents flows
+SECONDS_MIN = 120 # 2 mins
+
+CURRENT_FLOWS_BY_IDS = {}
+CURRENT_FLOWS_QUESTIONS_BY_IDS = {}
+CURRENT_FLOWS_BY_IDS_PARAMS = {}
+
+END_ANS_FLOW = ["Gracias"]
+QUESTIONARY = [
+    "First question",
+    "Second Question"
+]
