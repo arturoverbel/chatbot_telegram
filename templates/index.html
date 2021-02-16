@@ -13,14 +13,14 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" ></script>
 </head>
 <body>
-    <h1>Chatbot Naty ❤</h1> 
+    <h1>❤ Chatbot Naty ❤</h1> 
 
     <button type="button" id="start" class="btn btn-primary">Start</button>
     <button type="button" id="stop" class="btn btn-danger">Stop and Report</button>
 
     <hr>
 
-    
+
     <div class="container">
         <div class="row">
           <div class="col-sm">
@@ -55,11 +55,11 @@
                 running = false
 
                 $("#texting").html(text)
-                
+
                 getResults()
                 setTimeout("getResults()",5000);
             });
-            
+
         });
 
         function getResults() {
@@ -77,9 +77,9 @@
         }
 
         function runLogs() {
-            
+
             $.get( "/logs", function( data ) {
-                
+
                 $("#logs").html(data)
             });
 

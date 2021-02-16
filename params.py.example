@@ -2,6 +2,8 @@ TOKEN = "TOKEN"
 URL = "https://api.telegram.org/bot" + TOKEN + "/"
 URL_FILE = "https://api.telegram.org/file/bot" + TOKEN + "/"
 
+CHAT_TYPE = "telegram"
+
 # Min hour for add to currents flows
 SECONDS_MIN = 120 # 2 mins
 

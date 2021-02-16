@@ -4,26 +4,30 @@ import params
 import json
 import logs
 
+
 def set_params(datas):
 
     for data in datas:
-        ID_CHAT = data["message"]["chat"]["id"]
-        ID_MESSAGE = data["update_id"]
+        if data["author"] == "573197612585@c.us":
+            continue
+
+        ID_CHAT = data["chatId"]
+        ID_MESSAGE = data["id"]
 
         data_to_save = {
-            "update_id": data["update_id"],
-            "name": data["message"]["chat"]["first_name"],
-            "id": data["message"]["chat"]["id"],
-            "date": data["message"]["date"],
-            "type": "",
-            "answer": "other"
+            "id": ID_MESSAGE,
+            "name": data["senderName"],
+            "chatid": ID_CHAT,
+            "date": data["time"],
+            "type": "text",
+            "answer": data["body"]
         }
 
         # FILTER TIME
         elapsedTime = datetime.now() - datetime.fromtimestamp(data_to_save["date"])
         if elapsedTime.total_seconds() > params.SECONDS_MIN:
             continue
-        
+
         if ID_CHAT not in params.CURRENT_FLOWS_BY_IDS:
             params.CURRENT_FLOWS_BY_IDS[ID_CHAT] = []
             params.CURRENT_FLOWS_QUESTIONS_BY_IDS[ID_CHAT] = []
@@ -33,39 +37,30 @@ def set_params(datas):
 
         found = False
         for chat in params.CURRENT_FLOWS_BY_IDS[ID_CHAT]:
-            if chat["update_id"] == ID_MESSAGE:
+            if chat["id"] == ID_MESSAGE:
                 found = True
                 break
         if found:
             continue
-        
-        if "text" in data["message"]:
-            data_to_save["type"] = "text"
-            data_to_save["answer"] = data["message"]["text"]
-        elif "voice" in data["message"]:
-            data_to_save["type"] = "voice"
-            data_to_save["answer"] = get_file(data["message"]["voice"]["file_id"])
-        elif "photo" in data["message"]:
-            data_to_save["type"] = "photo"
-            data_to_save["answer"] = get_file(data["message"]["photo"][0]["file_id"])
-        
+
+        if "https://" in data["body"]:
+            data_to_save["type"] = "link"
+            data_to_save["answer"] = get_file(data["body"])
+
         txt = "<br>" + str(ID_CHAT) + "<br> -> <br>bot<br>: " + data_to_save["answer"]
         logs.log(txt)
 
         params.CURRENT_FLOWS_BY_IDS[ID_CHAT].append(data_to_save)
 
-def get_file(file_id):
-    ## Get File Path
-    response = requests.get(params.URL + "getFile?file_id=" + file_id)
-    response_str = response.content.decode("utf8")
 
-    response_dic = json.loads(response_str)
+def get_file(file_link):
+    # Get File
+    file_stream = requests.get(file_link)
 
-    file_path = response_dic['result']['file_path']
-    
-
-    ## Get File
-    file_stream = requests.get(params.URL_FILE + file_path)
+    now = datetime.now()
+    key_time = str(now.year)+"_"+str(now.month)+"_"+str(now.day) + \
+        "_"+str(now.hour)+"_"+str(now.minute)
+    file_path = "media/" + key_time + "_" + file_link.split("/")[-1]
 
     open(file_path, 'wb').write(file_stream.content)
 

@@ -3,6 +3,7 @@ import params
 import requests
 import logs
 
+
 def send_answers():
 
     for ID_CHAT, messages in params.CURRENT_FLOWS_BY_IDS.items():
@@ -26,9 +27,10 @@ def send_answers():
 def send_text(idchat, texto):
     if texto in params.CURRENT_FLOWS_QUESTIONS_BY_IDS[idchat]:
         return
+
     params.CURRENT_FLOWS_QUESTIONS_BY_IDS[idchat].append(texto)
 
-    requests.get(params.URL + "sendMessage?text=" + texto + "&chat_id=" + str(idchat))
-    
+    requests.get(params.URL_SEND + "&chatId=" + str(idchat) + "&body=" + texto)
+
     txt = "(bot) -> (" + str(idchat) + "): " + texto
     logs.log(txt)
