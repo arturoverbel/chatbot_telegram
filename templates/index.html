@@ -15,8 +15,8 @@
 <body>
     <h1>❤ Chatbot Naty ❤</h1> 
 
-    <button type="button" id="start" class="btn btn-primary">Start</button>
-    <button type="button" id="stop" class="btn btn-danger">Stop and Report</button>
+        <button type="button" id="restart" class="btn btn-primary">Restart and Result</button>
+        <h3>Running...</h3>
 
     <hr>
 
@@ -24,68 +24,33 @@
     <div class="container">
         <div class="row">
           <div class="col-sm">
-            <div id="texting"></div>
+            <div id="log_info"></div>
           </div>
           <div class="col-sm">
-            <div id="results"></div>
-          </div>
-          <div class="col-sm">
-            <div id="logs"></div>
+            <div id="log_web"></div>
           </div>
         </div>
       </div>
 
     <script>
-        var running = true;
-        getResults()
+        //runLogWeb();
 
-        $('#start').click(function(){
-            $.get( "/start", function( data ) {
-                var text = "<h3>Running...</h3>";
-                running = true
-                runLogs();
-
-                $("#texting").html(text)
+        $('#restart').click(function(){
+            $.get( "/restart", function( data ) {
+                console.log(data);
             });
         });
 
-        $('#stop').click(function(){
-            $.get( "/stop", function( data ) {
-                var text = "<h3>Stopped</h3>";
-                running = false
+        function runLogWeb() {
 
-                $("#texting").html(text)
-
-                getResults()
-                setTimeout("getResults()",5000);
-            });
-
-        });
-
-        function getResults() {
-            $("#results").html("Loading results ...");
-
-            $.get( "/results", function( data ) {
-                txt = ""
-                data.forEach( function(valor, indice, array) {
-                    txt += "<a href='" + valor + "' target='_blank'>" + valor + "</a>";
-                    txt += "<br>"
+            $.get( "/log_web", function( data_list ) {
+                data_list.forEach(function f(item, index) {
+                  document.getElementById("log_web").innerHTML += item + "<br>";
                 });
 
-                $("#results").html(txt)
-            });
-        }
-
-        function runLogs() {
-
-            $.get( "/logs", function( data ) {
-
-                $("#logs").html(data)
             });
 
-            if(running) {
-                setTimeout("runLogs()",1000);
-            }
+            setTimeout("runLogWeb()",1500);
         }
 
     </script>

@@ -1,0 +1,7 @@
+WHATSAPP_TOKEN = "token"
+WHATSAPP_INSTANCES = "12345"
+
+WHATSAPP_SETTINGS = {
+    'URL_GET': f'https://eu16.chat-api.com/instance{WHATSAPP_INSTANCES}/messages?token={WHATSAPP_TOKEN}',
+    'URL_SEND': f'https://eu16.chat-api.com/instance{WHATSAPP_INSTANCES}/sendMessage?token={WHATSAPP_TOKEN}'
+}

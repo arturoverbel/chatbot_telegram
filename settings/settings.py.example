@@ -1,0 +1,12 @@
+FOLDER_CONVERSATION = "modules/data"
+FOLDER_RESULTS = "modules/results"
+
+SETTINGS = {
+    'TEST': {
+        'QUESTIONNAIRE': [
+            "First question",
+            "Second Question"
+        ],
+        'END_ANS_FLOW': ["Gracias"]
+    }
+}
