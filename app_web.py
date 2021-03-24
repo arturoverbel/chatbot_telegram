@@ -1,7 +1,6 @@
 from flask import Flask, render_template, Response, send_from_directory
 from worker.worker import WorkerBot
 import json
-import thread
 
 
 app = Flask(__name__)
