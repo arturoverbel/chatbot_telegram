@@ -9,6 +9,7 @@ class WhatsappApi:
         self.URL_GET = WHATSAPP_SETTINGS['URL_GET']
         self.URL_SEND = WHATSAPP_SETTINGS['URL_SEND']
         self.index_first_time = 0
+        self.log_number_messages = 0
 
         self.first_time()
 
@@ -28,6 +29,10 @@ class WhatsappApi:
         messages = response.content.decode("utf8")
 
         messages_dict = json.loads(messages)
+
+        if messages_dict['lastMessageNumber'] != self.log_number_messages:
+            self.log_number_messages = messages_dict['lastMessageNumber']
+            print(f'Number last messages: {self.log_number_messages}')
 
         return messages_dict['messages']
 

@@ -15,7 +15,7 @@
 <body>
     <h1>❤ Chatbot Naty ❤</h1> 
 
-        <button type="button" id="restart" class="btn btn-primary">Restart and Result</button>
+        <button type="button" id="restart" class="btn btn-primary">Restart and Generate Results</button>
         <h3>Running...</h3>
 
     <hr>
@@ -24,16 +24,40 @@
     <div class="container">
         <div class="row">
           <div class="col-sm">
-            <div id="log_info"></div>
+            <div id="log_info">
+                <div class="my-3 p-3 bg-body rounded shadow-sm">
+                    <h6 class="border-bottom pb-2 mb-0">Conversations</h6>
+                    <div id="conversations">
+                    </div>
+                  </div>
+
+            </div>
           </div>
-          <div class="col-sm">
-            <div id="log_web"></div>
-          </div>
+
+            <div class="col">
+                <div id="log_web">
+                    <div class="my-3 p-3 bg-body rounded shadow-sm">
+                        <h6 class="border-bottom pb-2 mb-0">Logging</h6>
+                        <div id="logging"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col">
+                <div id="log_results">
+                    <div class="my-3 p-3 bg-body rounded shadow-sm">
+                        <h6 class="border-bottom pb-2 mb-0">Results</h6>
+                        <div id="list_results"></div>
+                    </div>
+
+                </div>
+            </div>
         </div>
       </div>
 
     <script>
-        //runLogWeb();
+        runLogs();
 
         $('#restart').click(function(){
             $.get( "/restart", function( data ) {
@@ -41,16 +65,52 @@
             });
         });
 
-        function runLogWeb() {
+        function runLogs() {
 
-            $.get( "/log_web", function( data_list ) {
-                data_list.forEach(function f(item, index) {
-                  document.getElementById("log_web").innerHTML += item + "<br>";
+            $.get( "/logs", function( data_list ) {
+
+                var htmlINNER = "";
+                for (const [key, value] of Object.entries(data_list["log_info"])) {
+
+                    qs = value['questions']
+                    lastQ = ""
+                    if (qs.length > 0) lastQ = qs[qs.length - 1];
+
+                    as = value['answers']
+                    lastA = value['text']
+                    if (as.length > 0) {
+                        lastA = as[as.length - 1];
+                        if (lastA.includes('media/'))  lastA = "<a href='"+lastA+"'>" + lastA + "</a>";
+                    }
+
+                    htmlINNER += "<div class='d-flex text-muted pt-3'>" +
+                          "<p class='pb-3 mb-0 small lh-sm border-bottom'>" +
+                            "<strong class='d-block text-gray-dark'>" + value['name'] + "</strong>" +
+                            "<strong class='d-block text-gray-dark'>Last Question: " + lastQ + "</strong>" +
+                            "Last Answer: " + lastA +
+                          "</p>" +
+                        "</div>"
+                  console.log(key, value);
+                }
+
+                $("#conversations").html(htmlINNER)
+
+                var htmlLOG = ""
+                data_list["log_web"].forEach(function m(item, index) {
+                    htmlLOG += item + "<hr>"
                 });
+                $("#logging").html(htmlLOG)
+
+                var htmlRESULTS = ""
+                data_list["results"].forEach(function m(item, index) {
+                    htmlRESULTS += "<a href='"+item+"'>" + item + "</a><hr>"
+                });
+                $("#list_results").html(htmlRESULTS)
+
 
             });
 
-            setTimeout("runLogWeb()",1500);
+            setTimeout("runLogs()",1500);
         }
 
     </script>

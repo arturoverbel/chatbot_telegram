@@ -2,7 +2,7 @@ FOLDER_CONVERSATION = "modules/data"
 FOLDER_RESULTS = "modules/results"
 
 SETTINGS = {
-    'TEST': {
+    'QUESTIONNAIRE': {
         'QUESTIONNAIRE': [
             "First question",
             "Second Question"

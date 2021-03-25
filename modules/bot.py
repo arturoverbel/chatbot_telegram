@@ -7,7 +7,7 @@ import csv
 
 
 class Bot:
-    def __init__(self, conversation_type: str = "TEST"):
+    def __init__(self, conversation_type: str = "QUESTIONNAIRE"):
         self.conversation_type = conversation_type
 
     def restart(self):

@@ -8,7 +8,7 @@ class Conversation:
     def __init__(self,
                  identification: str,
                  name: str,
-                 conversation_type: str = 'TEST',
+                 conversation_type: str = 'QUESTIONNAIRE',
                  ):
 
         # Data Firsts
